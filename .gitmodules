@@ -1,0 +1,7 @@
+[submodule "models/ban-vqa"]
+	path = models/ban_vqa
+	url = https://github.com/jnhwkim/ban-vqa.git
+[submodule "models/bottom-up-features"]
+	path = models/bottom_up_features
+	url = https://github.com/btjhjeon/bottom-up-features.git
+	branch = pytorch-1.0
