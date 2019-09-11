@@ -12,9 +12,15 @@ import cv2
 import torch
 from torch.utils.data import Dataset
 
-import models.ban_vqa.utils as ban_utils
 import models.ban_vqa.dataset as ban_dataset
+import models.ban_vqa.utils as ban_utils
 import models.bottom_up_features.utils as buatt_utils
+
+
+def build_dataset(mode):
+    dict_path = 'data/dictionary.pkl'
+    dictionary = ban_dataset.Dictionary.load_from_file(dict_path)
+    return VQAFeatureDataset(mode, dictionary)
 
 
 class VQAFeatureDataset(Dataset):
@@ -114,10 +120,21 @@ class VQAFeatureDataset(Dataset):
                     entry['answer']['labels'] = None
                     entry['answer']['scores'] = None
 
+    def load_im_tensor(self, im_path):
+        im = cv2.imread(im_path)
+        blobs, im_scales = buatt_utils.get_image_blob(im)
+
+        img = np.array(blobs)
+        img = torch.from_numpy(img).permute(0, 3, 1, 2).squeeze(0)
+        img_info = torch.tensor([blobs.shape[1], blobs.shape[2], im_scales[0]])
+        return img, img_info
+
     def __getitem__(self, index):
         entry = self.entries[index]
 
         img_path = entry['image']
+        img, img_info = self.load_im_tensor(img_path)
+
         question = entry['q_token']
         question_id = entry['question_id']
         answer = entry['answer']
@@ -127,9 +144,9 @@ class VQAFeatureDataset(Dataset):
             target = torch.zeros(self.num_ans_candidates)
             if labels is not None:
                 target.scatter_(0, labels, scores)
-            return img_path, question, target
+            return img, img_info, question, target
         else:
-            return img_path, question, question_id
+            return img, img_info, question, question_id
 
     def __len__(self):
         return len(self.entries)
