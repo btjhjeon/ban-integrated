@@ -31,4 +31,4 @@ if __name__ == '__main__':
     ban = nn.DataParallel(ban).cuda()
 
     ban.load_state_dict(torch.load(args.input)['model_state'])
-    torch.save(ban.module, args.output)
+    torch.save(ban.module.state_dict(), args.output)
