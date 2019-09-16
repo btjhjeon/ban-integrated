@@ -46,11 +46,16 @@ class IntegratedBAN(nn.Module):
 
         return self.core(v, b, q, None)
 
-    def load_submodels(self, core_path, detector_path):
-        core_data = torch.load(core_path)
+    def load_submodels(self, core_path=None, detector_path=None, core_data=None, detector_data=None):
+        assert core_data is not None or core_path is not None
+        assert detector_data is not None or detector_path is not None
+
+        if core_data is None:
+            core_data = torch.load(core_path)
         self.core.load_state_dict(core_data)
 
-        detector_data = torch.load(detector_path)
+        if detector_data is None:
+            detector_data = torch.load(detector_path)
         self.detector.load_state_dict(detector_data)
 
 

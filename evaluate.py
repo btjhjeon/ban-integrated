@@ -16,11 +16,9 @@ import models.ban_vqa.utils as ban_utils
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ban_input', type=str, default='saved_models/ban/model_epoch12_module.pth')
+    parser.add_argument('--input', type=str, default='saved_models/ban-integrated/model_epoch12.pth')
     parser.add_argument('--buatt_cfg', type=str, help='config file',
                         default='models/bottom_up_features/cfgs/faster_rcnn_resnet101.yml')
-    parser.add_argument('--buatt_input', type=str, help='path to pretrained model',
-                        default='saved_models/bottom-up/bottomup_pretrained_10_100.pth')
     args = parser.parse_args()
     return args
 
@@ -70,7 +68,7 @@ if __name__ == '__main__':
     model = build_model(args, eval_dset)
     model = nn.DataParallel(model).cuda()
 
-    model.module.load_submodels(args.ban_input, args.buatt_input)
+    model.load_state_dict(torch.load(args.input))
     model.eval()
 
     eval_score, bound, entropy = evaluate(model, eval_loader)
