@@ -11,7 +11,6 @@ from torch.utils.data import DataLoader
 from models.ban import build_model
 from vqa_dataset import build_dataset
 import models.ban_vqa.train as train
-import models.ban_vqa.utils as ban_utils
 
 
 def parse_args():
