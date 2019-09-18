@@ -17,10 +17,9 @@ import models.ban_vqa.utils as ban_utils
 import models.bottom_up_features.utils as buatt_utils
 
 
-def build_dataset(mode):
-    dict_path = 'data/dictionary.pkl'
+def build_dataset(mode, dataroot='data/', dict_path='data/dictionary.pkl'):
     dictionary = ban_dataset.Dictionary.load_from_file(dict_path)
-    return VQAFeatureDataset(mode, dictionary)
+    return VQAFeatureDataset(mode, dictionary, dataroot)
 
 
 class VQAFeatureDataset(Dataset):
