@@ -60,15 +60,15 @@ class IntegratedBAN(nn.Module):
         self.detector.load_state_dict(detector_data)
 
 
-def build_model(args, dataset):
+def build_model(buatt_cfg, dataset):
 
     ban = base_model.build_ban(dataset, 768, '', 6, 'vqa')
 
     # Load arguments.
     N_CLASSES = 1601
 
-    if args.buatt_cfg is not None:
-        cfg_from_file(args.buatt_cfg)
+    if buatt_cfg is not None:
+        cfg_from_file(buatt_cfg)
 
     cfg.CUDA = True
     np.random.seed(cfg.RNG_SEED)

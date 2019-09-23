@@ -32,6 +32,8 @@ class VQAFeatureDataset(Dataset):
         self.ans2label = cPickle.load(open(ans2label_path, 'rb'))
         self.label2ans = cPickle.load(open(label2ans_path, 'rb'))
         self.num_ans_candidates = len(self.ans2label)
+        self.img_id2idx = {}
+        self.img_idx2id = []
 
         self.dictionary = dictionary
 
@@ -74,13 +76,20 @@ class VQAFeatureDataset(Dataset):
                 img_id = question['image_id']
                 img_path = _make_path(name, img_id)
                 if not ban_dataset.COUNTING_ONLY or ban_dataset.is_howmany(question['question'], answer, label2ans):
+                    self.img_id2idx[img_id] = len(entries)
+                    self.img_idx2id.append(img_id)
+
                     entries.append(ban_dataset._create_entry(img_path, question, answer))
+
         else:  # test2015
             entries = []
             for question in questions:
                 img_id = question['image_id']
                 img_path = _make_path(name, img_id)
                 if not ban_dataset.COUNTING_ONLY or ban_dataset.is_howmany(question['question'], None, None):
+                    self.img_id2idx[img_id] = len(entries)
+                    self.img_idx2id.append(img_id)
+
                     entries.append(ban_dataset._create_entry(img_path, question, None))
 
         return entries

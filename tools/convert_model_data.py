@@ -43,7 +43,7 @@ if __name__ == '__main__':
     ban.load_state_dict(torch.load(args.ban_input)['model_state'])
     ban_data = ban.module.state_dict()
 
-    model = build_model(args, eval_dset)
+    model = build_model(args.buatt_cfg, eval_dset)
     model = nn.DataParallel(model).cuda()
 
     model.module.load_submodels(core_data=ban_data, detector_path=args.buatt_input)

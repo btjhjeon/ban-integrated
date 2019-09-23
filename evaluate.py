@@ -64,7 +64,7 @@ if __name__ == '__main__':
     eval_dset = build_dataset('val')
     eval_loader = DataLoader(eval_dset, batch_size=batch_size)
 
-    model = build_model(args, eval_dset)
+    model = build_model(args.buatt_cfg, eval_dset)
     model = nn.DataParallel(model).cuda()
 
     model.load_state_dict(torch.load(args.input))
