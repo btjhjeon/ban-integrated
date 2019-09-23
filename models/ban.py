@@ -60,9 +60,9 @@ class IntegratedBAN(nn.Module):
         self.detector.load_state_dict(detector_data)
 
 
-def build_model(buatt_cfg, dataset):
+def build_model(dataset, buatt_cfg, num_hid=768, op='', gamma=6):
 
-    ban = base_model.build_ban(dataset, 768, '', 6, 'vqa')
+    ban = base_model.build_ban(dataset, num_hid, op, gamma, 'vqa')
 
     # Load arguments.
     N_CLASSES = 1601

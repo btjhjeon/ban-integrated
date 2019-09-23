@@ -17,7 +17,7 @@ def build_model(dataroot='data/', model_path='saved_models/ban/model_epoch12.pth
 
     this_dir = os.path.dirname(__file__)
     buatt_cfg = os.path.join(this_dir, 'models/bottom_up_features/cfgs/faster_rcnn_resnet101.yml')
-    model = ban.build_model(buatt_cfg, dataset)
+    model = ban.build_model(dataset, buatt_cfg)
 
     model = nn.DataParallel(model).cuda()
     model.load_state_dict(torch.load(model_path))
